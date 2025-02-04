@@ -2,7 +2,7 @@
 ## Introduction
 This project is the implement of [iToF-flow-based High Frame Rate Depth Imaging](https://openaccess.thecvf.com/content/CVPR2024/papers/Meng_iToF-flow-based_High_Frame_Rate_Depth_Imaging_CVPR_2024_paper.pdf). 
 
-More details about this work can be found in our [homepage](https://computationalperceptionlab.github.io/publications/assert/project_MengYu/iToF-flow.htm). 
+More details about this work can be found in our [homepage](https://computationalperceptionlab.github.io/publications/assert/project_MengYu/iToF-flow.html). 
 
 ### CVPR2024 Poster:
 
