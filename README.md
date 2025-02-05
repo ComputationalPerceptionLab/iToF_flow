@@ -1,47 +1,78 @@
-# AdaCS: Adaptive Compressive Sensing With Restricted Isometry Property-Based Error-Clamping (TPAMI 2024) 
+# iToF-flow-based High Frame Rate Depth Imaging
+## Introduction
+This project is the implement of [iToF-flow-based High Frame Rate Depth Imaging](https://openaccess.thecvf.com/content/CVPR2024/papers/Meng_iToF-flow-based_High_Frame_Rate_Depth_Imaging_CVPR_2024_paper.pdf). 
 
-This repository is the pytorch implement of [AdaCS: Adaptive Compressive Sensing With Restricted Isometry Property-Based Error-Clamping](https://ieeexplore.ieee.org/document/10412658)
+More details about this work can be found in our [homepage](https://computationalperceptionlab.github.io/publications/assert/project_MengYu/iToF-flow.html). 
 
-Chenxi Qiu and [Xuemei Hu](https://scholar.google.com.hk/citations?hl=zh-CN&user=yZauWzEAAAAJ)
+### CVPR2024 Poster:
 
-*School of Electrical Science and Engineering, Nanjing University, Jiangsu, China.*
+![itof_flow_poster](README.assets/itof_flow_poster.png)
 
-## Abstract
+## Usage
 
-Scene-dependent adaptive compressive sensing (CS) has been a long pursuing goal that has huge potential to significantly improve the performance of CS. However, with no access to the ground truth, how to design the scene-dependent adaptive strategy is still an open problem. In this paper, a restricted isometry property (RIP) condition-based error-clamping is proposed, which could directly predict the reconstruction error, i.e. the difference between the current-stage reconstructed image and the ground truth image, and adaptively allocate more samples to regions with larger reconstruction error at the next sampling stage. Furthermore, we propose a CS reconstruction network composed of Progressively inverse transform and Alternating Bi-directional Multi-grid Network, named PiABM-Net, that could efficiently utilize the multi-scale information for reconstructing the target image. The effectiveness of the proposed adaptive and cascaded CS method is demonstrated with extensive quantitative and qualitative experiments, compared with the state-of-the-art CS algorithms.
+### Installation
 
-## Overview
+The `requirements.txt` can be found in our project. 
 
-### Cascaded AdaCS framework
-![Cascaded AdaCS framework](figs/AdaCS.png)
- 
-### PiABM-Net
-![PiABM-Net](figs/PiABM-Net.png)
+```cmd
+pip3 install -r requirements.txt
+```
 
-## Environmental Requirements
-- Python == 3.8.16
-- Pytorch == 2.0.1
+### Docker deployment 
 
-## Test   
+The docker-based deployment approach is more reliable. The docker image  can be obtained by  [docker download](https://box.nju.edu.cn/d/88065a3013e54ac5a3d2/). 
 
-Download the [pretrained weights](https://box.nju.edu.cn/d/89dca6f22250415c9768/) and put it into `./weights/`, then run:
+```cmd
+docker load -i tof_flow.tar
+docker run -it -v /your warkpath/:/your warkpath/  --gpus all  --shm-size=48g 1835a89e3bb
+```
 
-## Command
-### Train
-`python train.py --gpu_list 0`
-### Test
-`python test.py --test_stage 0/1/2/3/4 --test_name Set11`
+## Evaluation
+
+The   [pre-trained weight](https://box.nju.edu.cn/f/e1f361dda90a499999f9/) and  [evaluation demo data](https://box.nju.edu.cn/f/00e21c3ef90d4df0837d/) should be downloaded.
+
+A demo is provided to demonstrate our approach. A visualization result will be saved to the `./evl_ours_visualization`
+```
+python eval_demo.py
+```
+
+The Evaluation data can be replaced to any other iToF measurements by changing the data path in `./val_data/evl_data.json`
+
+
+
+## Dataset
+
+The dataset used in our work is consisted of two parts [Cornell-Box Dataset](https://github.com/schellmi42/WFlowToF) and our extension dataset.
+
+The `Cornell-Box Dataset` can be obtained in [Cornell-Box Dataset](https://github.com/schellmi42/WFlowToF).
+
+Our extension dataset will be available publicly after some procedures required in the data security policy. For the urgent needs, you can email me `mengyu@smail.nju.edu.cn`.
+
+For each set of motion data, we use a `json` file to record the path of corresponding iToF measurements at each moment. The `./make_traing_data/make_traing_data_LLT_SF_json.py` gives a demo for making the`json`. sequence for training and testing.
+
+## Training 
+
+Our method is trained on 3× `RTX 2080` with `torch.distributed`.
+
+```cmd
+python3 -m torch.distributed.launch --nproc_per_node=3 train_tof_cvpr_SF.py --world_size=3 --batch_size 8 --epoch 60
+```
+
+
 
 ## Citation
 
-If you find the code helpful in your research or work, please cite the following paper:
+If you think this project is helpful, please feel free to leave a star or cite our paper:
 
 ```
-@article{qiu2024adacs,
-  title={AdaCS: Adaptive Compressive Sensing with Restricted Isometry Property-Based Error-clamping},
-  author={Qiu, Chenxi and Hu, Xuemei},
-  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  year={2024},
-  publisher={IEEE}
+@InProceedings{Meng_2024_CVPR,
+    author    = {Meng, Yu and Xue, Zhou and Chang, Xu and Hu, Xuemei and Yue, Tao},
+    title     = {iToF-flow-based High Frame Rate Depth Imaging},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2024},
+    pages     = {4929-4938}
 }
 ```
+
+##### **For any questions about the code and paper, please feel free to contact me `mengyu@smail.nju.edu.cn`.**
